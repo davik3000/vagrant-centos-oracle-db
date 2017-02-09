@@ -7,6 +7,7 @@ export VAGRANT_NO_PLUGINS=1
 
 echo " > create and boot VM"
 vagrant up oradb
+[ $? -ne 0 ] && echo "Error. Stop execution..." && exit 1
 
 #echo "-----"
 #echo "Applying provision to nodes"
@@ -16,7 +17,10 @@ echo "-----"
 echo "Reboot the nodes and apply guest addition through plugin"
 unset VAGRANT_NO_PLUGINS
 vagrant reload
+[ $? -ne 0 ] && echo "Error. Stop execution..." && exit 1
 
 echo "-----"
 echo "Reboot the nodes"
 vagrant reload
+
+exit $?
