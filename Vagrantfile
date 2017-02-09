@@ -17,8 +17,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   _provisionScript_postInstall_hostPath = "./config/post-install.sh"
   _provisionScript_postInstall_args = _provisionFolder_config_guestPath
 
-  # DART official CentOS box
-  config.vm.box = "centos/7"
+  # DART custom CentOS box
+  #config.vm.box = "centos/7"
+  config.vm.box = "davik3000/CentOS-7"
 
   # db instance
   config.vm.define "oradb", primary: true do |oradb|
