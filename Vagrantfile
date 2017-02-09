@@ -23,13 +23,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # db instance
   config.vm.define "oradb", primary: true do |oradb|
     oradb.vm.hostname = "oradb.example.com"
-    oradb.network "forwarded_port", guest: 1521, host: 1521
+    oradb.vm.network "forwarded_port", guest: 1521, host: 1521
     oradb.vm.synced_folder ".", "/vagrant", disabled:true
 
     # DART check and exec only if plugin are not disabled
     if Vagrant.has_plugin?("vagrant-vbguest")
       # DART updated local folder with software installers
-      admin.vm.synced_folder _sharedFolder_software_hostPath, _sharedFolder_software_guestPath
+      oradb.vm.synced_folder _sharedFolder_software_hostPath, _sharedFolder_software_guestPath
     end
 
     oradb.vm.provider :virtualbox do |vb|
