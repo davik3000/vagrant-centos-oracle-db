@@ -9,6 +9,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   _sharedFolder_software_hostPath = "./software"
   _sharedFolder_software_guestPath = "/var/tmp/vagrant/software"
 
+  _sharedFolder_puppet_hostPath = "./puppet"
+  _sharedFolder_puppet_guestPath = "/var/tmp/vagrant/puppet"
+
   _provisionFolder_config_hostPath = "./config"
   _provisionFolder_config_guestPath = "/tmp/vagrant/config"
 
@@ -16,6 +19,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   _provisionScript_preInstall_args = _provisionFolder_config_guestPath
   _provisionScript_postInstall_hostPath = "./config/post-install.sh"
   _provisionScript_postInstall_args = _provisionFolder_config_guestPath
+
+  _provisionScript_puppetInstall_hostPath = "./config/puppet_install.sh"
+  _provisionScript_puppetConfig_hostPath = "./config/puppet_config.sh"
+  _provisionFolder_puppetConfig_args = _provisionFolder_config_guestPath
 
   # DART custom CentOS box
   #config.vm.box = "centos/7"
@@ -29,8 +36,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # DART check and exec only if plugin are not disabled
     if Vagrant.has_plugin?("vagrant-vbguest")
-      # DART updated local folder with software installers
+      # DART shared folders
       oradb.vm.synced_folder _sharedFolder_software_hostPath, _sharedFolder_software_guestPath
+      oradb.vm.synced_folder _sharedFolder_puppet_hostPath, _sharedFolder_puppet_guestPath
     end
 
     oradb.vm.provider :virtualbox do |vb|
@@ -52,6 +60,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     oradb.vm.provision :shell do |s|
       s.path = _provisionScript_postInstall_hostPath
       s.args = [_provisionScript_postInstall_args]
+    end
+
+    # DART install and config puppet
+    oradb.vm.provision :shell, path: _provisionScript_puppetInstall_hostPath
+    oradb.vm.provision :shell do |s|
+      s.path = _provisionScript_puppetConfig_hostPath
+      s.args = [_provisionFolder_puppetConfig_args]
     end
 
   end

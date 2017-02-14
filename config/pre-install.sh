@@ -11,7 +11,7 @@ CONFIG_DIR=
 function cleanUpProvisionConfig()
 {
   echo "-----"
-  echo "Removing provision configuration folder"
+  echo "Removing provision configuration folder: ${CONFIG_DIR}"
 
   if [ -d ${CONFIG_DIR} ] ; then
     echo " > removing folder: ${CONFIG_DIR}"
@@ -25,7 +25,9 @@ function cleanUpProvisionConfig()
     fi;
   else
     echo "-----"
-    echo "Error: folder ${CONFIG_DIR} doesn't not exist!"
+    echo "Error: folder ${CONFIG_DIR} doesn't exist! Create the folder and change attribs."
+    #mkdir -p ${CONFIG_DIR}
+    #chmod ugo+rw ${CONFIG_DIR}
   fi; 
 }
 
